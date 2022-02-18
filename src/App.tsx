@@ -2,53 +2,42 @@ import React from 'react';
 import logo from './logo.svg';
 import { Counter } from './features/counter/Counter';
 import './App.css';
+import { Routes, Route, Link } from 'react-router-dom';
+
+// src/components/Home.tsx
+const Home = () => {
+  return <p>Home</p>;
+}
+// src/components/Settings.tsx
+const Settings = () => {
+  return <p>Settings</p>;
+}
+
+// src/components/Topics.tsx
+const Topics = () => {
+  return <p>Topics</p>;
+}
+
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
+
         <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
+        <div>
+          <Link to='/'>Welcome</Link> <Link to='/start'>Start Test</Link> <Link to='/results'>Results</Link>
+        </div>
+        <Routes>
+          <Route path='/' element={<Home/>} />
+          <Route path='/start' element={<Topics/>} />
+          <Route path='/results' element={<Settings/>} />
+        </Routes>
+
+
         <span>
           <span>Teamway test task </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
         </span>
       </header>
     </div>
