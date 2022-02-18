@@ -37,7 +37,7 @@ function App() {
 
 
         <span>
-          <span>Teamway test task </span>
+          <span>Teamway test task. Tests are (c) https://www.psychologies.co.uk/</span>
         </span>
       </header>
     </div>
