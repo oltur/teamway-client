@@ -11,15 +11,21 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import MenuIcon from '@mui/icons-material/Menu';
-import logo from './logo.svg';
-import { useNavigate } from 'react-router-dom';
+import logo from '../../logo.svg';
+import { useNavigate, useLocation } from "react-router-dom";
 
-const pages = [['Welcome','/'], ['Tests List','/tests-list'], ['Test','/test'], ['Counter', '/counter']];
-const settings = [
-    //'Profile', 'Account', 'Dashboard', 
-    'Logout'];
+import { useAuth } from "../../auth";
+
+const pages = [
+  ['Welcome', '/'], 
+//  ['Tests List', '/tests-list'], 
+  ['Test', '/test'], 
+  ['Counter', '/counter']
+];
+const settings = [['Logout', '/logout']];
 
 const ResponsiveAppBar = () => {
+  let auth = useAuth();
   const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -38,6 +44,8 @@ const ResponsiveAppBar = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const loc = useLocation();
 
   return (
     <AppBar position="static">
@@ -61,7 +69,7 @@ const ResponsiveAppBar = () => {
               onClick={handleOpenNavMenu}
               color="inherit"
             >
-                <MenuIcon />
+              <MenuIcon />
             </IconButton>
             <Menu
               id="menu-appbar"
@@ -82,16 +90,17 @@ const ResponsiveAppBar = () => {
               }}
             >
               {pages.map((page) => (
-                <MenuItem 
-                    key={page[0]}
-                    onClick={() => {handleCloseNavMenu(); navigate(page[1])}}
+                <MenuItem
+                  key={page[0]}
+                  disabled={loc.pathname === page[1]}
+                  onClick={() => { handleCloseNavMenu(); navigate(page[1]) }}
                 >
-                <Typography textAlign="center">{page[0]}</Typography>
+                  <Typography textAlign="center">{page[0]}</Typography>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
-          
+
           <Typography
             variant="h6"
             noWrap
@@ -105,7 +114,8 @@ const ResponsiveAppBar = () => {
             {pages.map((page) => (
               <Button
                 key={page[0]}
-                onClick={() => {handleCloseNavMenu(); navigate(page[1])}}
+                disabled={loc.pathname === page[1]}
+                onClick={() => { handleCloseNavMenu(); navigate(page[1]) }}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 {page[0]}
@@ -116,7 +126,7 @@ const ResponsiveAppBar = () => {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar>AB</Avatar>
+                <Avatar>{auth.user?.substring(0, 2)}</Avatar>
               </IconButton>
             </Tooltip>
             <Menu
@@ -136,8 +146,10 @@ const ResponsiveAppBar = () => {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+                <MenuItem key={setting[0]} onClick={() => { handleCloseNavMenu(); navigate(setting[1]) }}
+                  disabled={auth.user === ""}
+                >
+                  <Typography textAlign="center">{setting[0]}</Typography>
                 </MenuItem>
               ))}
             </Menu>
