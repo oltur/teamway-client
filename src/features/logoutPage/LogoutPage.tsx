@@ -4,7 +4,7 @@ import { useAuth } from "../auth/auth";
 function LogoutPage() {
   let auth = useAuth();
   if(!!auth.authenticatedUser?.userId) {
-    auth.signout(() => {})
+    auth.signout(auth.authenticatedUser.token, null)
   }
   return (
     <div>

@@ -1,19 +1,5 @@
 import AuthenticatedUser from "./AuthenticatedUser";
 
-const TOKEN = "token"
-
-function setToken(token: string) {
-  localStorage.setItem(TOKEN, token);
-}
-
-function getToken(): string | null {
-  return localStorage.getItem(TOKEN)
-}
-
-function deleteToken() {
-  localStorage.removeItem(TOKEN)
-}
-
 function login(userName: string, password: string): Promise<AuthenticatedUser> {
   const credentials = {
     userName: userName,
@@ -35,7 +21,7 @@ function login(userName: string, password: string): Promise<AuthenticatedUser> {
   })
   .then(data => {
     let token = data.token;
-    setToken(token);
+//    setToken(token);
     const authenticatedUser = new AuthenticatedUser(
       data.userId,
       userName,
@@ -45,8 +31,8 @@ function login(userName: string, password: string): Promise<AuthenticatedUser> {
   })
 }
 
-function logout(): Promise<string> {
-  const token = getToken()
+function logout(token: string): Promise<string> {
+  //const token = getToken()
   if(token == null || token === "") {
     return Promise.resolve("ok")
   }
@@ -59,7 +45,7 @@ function logout(): Promise<string> {
   })
   .then((response) => {
     if (response.ok) {
-      deleteToken()
+      // deleteToken()
       return response.text();
     } else {
       throw Error(response.statusText);
@@ -67,4 +53,4 @@ function logout(): Promise<string> {
   })
 }
 
-export { login, logout, setToken, getToken };
+export { login, logout };

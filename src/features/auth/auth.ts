@@ -3,17 +3,21 @@ import { login, logout} from '../auth/authAPI';
 import AuthenticatedUser from "./AuthenticatedUser";
 
 const authProvider = {
-  signin(username: string, password: string, callback: (u: AuthenticatedUser) => void) {
+  signin(username: string, password: string, callback: ((u: AuthenticatedUser) => void) | null = null) {
     login(username, password)
       .then(authenticatedUser => {
-        callback(authenticatedUser);
+        if(!!callback) {
+          callback(authenticatedUser);
+        }
       })
       .catch(err => alert(err))
   },
-  signout(callback: VoidFunction) {
-    logout()
+  signout(token: string, callback: VoidFunction | null = null) {
+    logout(token)
       .then(() => {
-        callback();
+        if(!!callback) {
+          callback();
+        }
       })
       .catch(err => {}
       )
@@ -22,8 +26,8 @@ const authProvider = {
 
 interface AuthContextType {
   authenticatedUser: AuthenticatedUser;
-  signin: (username: string, password: string, callback: VoidFunction) => void;
-  signout: (callback: VoidFunction) => void;
+  signin: (username: string, password: string, callback: ((u: AuthenticatedUser) => void) | null) => void;
+  signout: (token: string, callback: VoidFunction | null) => void;
 }
 
 let AuthContext = React.createContext<AuthContextType>(null!);

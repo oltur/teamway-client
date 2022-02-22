@@ -7,7 +7,7 @@ export const store = configureStore({
   reducer: {
     auth: authReducer,
   },
-  preloadedState: initialState == null?{auth: {authenticatedUser: null}}:JSON.parse(initialState)
+  preloadedState: initialState == null?{auth: {authenticatedUser: ""}}:JSON.parse(initialState)
 });
 
 export type AppDispatch = typeof store.dispatch;

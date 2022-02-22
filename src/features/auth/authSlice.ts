@@ -1,13 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
-import AuthenticatedUser from "./AuthenticatedUser";
 
 export interface AuthState {
-  authenticatedUser: string | null
+  authenticatedUser: string
 }
 
 const initialState: AuthState = {
-  authenticatedUser: null,
+  authenticatedUser: "",
 };
 
 
@@ -17,8 +16,8 @@ export const authSlice = createSlice({
   initialState,
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
-    set: (state, action: PayloadAction<AuthenticatedUser>) => {
-      state.authenticatedUser = JSON.stringify(action.payload);
+    set: (state, action: PayloadAction<string>) => {
+      state.authenticatedUser = action.payload;
     },
   },
 });
@@ -30,9 +29,9 @@ export const { set } = authSlice.actions;
 // in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
 export const selectAuthenticatedUser = (state: RootState) => {
   if(!!state.auth?.authenticatedUser) {
-    return JSON.parse(state.auth.authenticatedUser) as AuthenticatedUser;
+    return state.auth.authenticatedUser;
   }
-  return new AuthenticatedUser()
+  return ""
 }
 
 export default authSlice.reducer;
