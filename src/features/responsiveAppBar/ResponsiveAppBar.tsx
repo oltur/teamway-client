@@ -14,13 +14,12 @@ import MenuIcon from '@mui/icons-material/Menu';
 import logo from '../../logo.svg';
 import { useNavigate, useLocation } from "react-router-dom";
 
-import { useAuth } from "../../auth";
+import { useAuth } from "../auth/auth";
 
 const pages = [
   ['Welcome', '/'], 
 //  ['Tests List', '/tests-list'], 
-  ['Test', '/test'], 
-  ['Counter', '/counter']
+  ['Test', '/test']
 ];
 const settings = [['Logout', '/logout']];
 
@@ -146,8 +145,8 @@ const ResponsiveAppBar = () => {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting[0]} onClick={() => { handleCloseNavMenu(); navigate(setting[1]) }}
-                  disabled={auth.user === ""}
+                <MenuItem key={setting[0]} onClick={() => { handleCloseNavMenu(); handleCloseUserMenu(); navigate(setting[1]) }}
+                  disabled={auth?.user === null}
                 >
                   <Typography textAlign="center">{setting[0]}</Typography>
                 </MenuItem>
