@@ -1,10 +1,13 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import testReducer from '../features/test/testSlice';
+import authReducer from '../features/auth/authSlice';
+
+let initialState = localStorage.getItem('reduxState')
 
 export const store = configureStore({
   reducer: {
-    counter: testReducer,
+    auth: authReducer,
   },
+  preloadedState: initialState == null?{auth: {authenticatedUser: null}}:JSON.parse(initialState)
 });
 
 export type AppDispatch = typeof store.dispatch;
@@ -15,3 +18,8 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   unknown,
   Action<string>
 >;
+
+store.subscribe(()=>{
+  let t = JSON.stringify(store.getState())
+  localStorage.setItem('reduxState', t)
+})

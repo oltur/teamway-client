@@ -1,6 +1,20 @@
-let token = ""
+import AuthenticatedUser from "./AuthenticatedUser";
 
-function login(userName: string, password: string): Promise<string> {
+const TOKEN = "token"
+
+function setToken(token: string) {
+  localStorage.setItem(TOKEN, token);
+}
+
+function getToken(): string | null {
+  return localStorage.getItem(TOKEN)
+}
+
+function deleteToken() {
+  localStorage.removeItem(TOKEN)
+}
+
+function login(userName: string, password: string): Promise<AuthenticatedUser> {
   const credentials = {
     userName: userName,
     password: password
@@ -20,12 +34,22 @@ function login(userName: string, password: string): Promise<string> {
     }
   })
   .then(data => {
-    token = data.token
-    return token
+    let token = data.token;
+    setToken(token);
+    const authenticatedUser = new AuthenticatedUser(
+      data.userId,
+      userName,
+      token      
+    )
+    return authenticatedUser
   })
 }
 
 function logout(): Promise<string> {
+  const token = getToken()
+  if(token == null || token === "") {
+    return Promise.resolve("ok")
+  }
   return fetch('http://localhost:8081/api/v1/user/logout', {
     method: 'POST',
     headers: {
@@ -35,7 +59,7 @@ function logout(): Promise<string> {
   })
   .then((response) => {
     if (response.ok) {
-      token = ""
+      deleteToken()
       return response.text();
     } else {
       throw Error(response.statusText);
@@ -43,4 +67,4 @@ function logout(): Promise<string> {
   })
 }
 
-export { login, logout };
+export { login, logout, setToken, getToken };

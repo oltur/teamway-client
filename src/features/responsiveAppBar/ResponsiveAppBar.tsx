@@ -125,7 +125,7 @@ const ResponsiveAppBar = () => {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar>{auth.user?.substring(0, 2)}</Avatar>
+                <Avatar>{auth.authenticatedUser?.userName?.substring(0, 2)}</Avatar>
               </IconButton>
             </Tooltip>
             <Menu
@@ -146,7 +146,7 @@ const ResponsiveAppBar = () => {
             >
               {settings.map((setting) => (
                 <MenuItem key={setting[0]} onClick={() => { handleCloseNavMenu(); handleCloseUserMenu(); navigate(setting[1]) }}
-                  disabled={auth?.user === null}
+                  disabled={!auth.authenticatedUser?.userId}
                 >
                   <Typography textAlign="center">{setting[0]}</Typography>
                 </MenuItem>

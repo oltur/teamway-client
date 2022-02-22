@@ -12,8 +12,8 @@ import LoginPage from './features/loginPage/LoginPage';
 import LogoutPage from './features/logoutPage/LogoutPage';
 import TestPage from './features/test/TestPage';
 import WelcomePage from './features/welcome/WelcomePage';
-import AuthProvider from './features/authProvider/AuthProvider';
-import RequireAuth from './features/requireAuth/RequireAuth';
+import AuthProvider from './features/auth/AuthProvider';
+import RequireAuth from './features/auth/RequireAuth';
 import Copyright from './features/copyright/Copyright';
 
 function App() {
