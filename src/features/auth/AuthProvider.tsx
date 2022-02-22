@@ -8,24 +8,33 @@ import {
 } from './authSlice';
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
-  const authenticatedUser = useAppSelector(selectAuthenticatedUser);
+  const authenticatedUserString = useAppSelector(selectAuthenticatedUser);
   const dispatch = useAppDispatch();
-  //    let [authenticatedUser, setAuthenticatedUser] = React.useState<AuthenticatedUser|null>(null);
   
-    let signin = (username: string, password: string, callback: VoidFunction) => {
+    let signin = (username: string, password: string, callback: ((u: AuthenticatedUser) => void) | null = null) => {
       return authProvider.signin(username, password, (authenticatedUser) => {
-        dispatch(set(authenticatedUser));
-        callback();
+        dispatch(set(JSON.stringify(authenticatedUser)));
+        if(!!callback) {
+          callback(authenticatedUser);
+        }
       });
     };
   
-    let signout = (callback: VoidFunction) => {
-      return authProvider.signout(() => {
-        dispatch(set(new AuthenticatedUser()));
-        callback();
+    let signout = (token: string, callback: VoidFunction | null = null) => {
+      return authProvider.signout(token, () => {
+        dispatch(set(""));
+        if(!!callback) {
+          callback();
+        }
       });
     };
   
+    var authenticatedUser: AuthenticatedUser
+    if(!!authenticatedUserString) {
+      authenticatedUser = JSON.parse(authenticatedUserString) as AuthenticatedUser
+    } else {
+      authenticatedUser = new AuthenticatedUser();
+    }
     let value = { authenticatedUser, signin, signout };
   
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
