@@ -1,30 +1,27 @@
 import React from 'react';
 import { login, logout} from '../auth/authAPI';
+import AuthenticatedUser from "./AuthenticatedUser";
 
 const authProvider = {
-  isAuthenticated: false,
-  signin(username: string, password: string, callback: VoidFunction) {
+  signin(username: string, password: string, callback: (u: AuthenticatedUser) => void) {
     login(username, password)
-      .then(token => {
-        authProvider.isAuthenticated = true;
-        callback();
+      .then(authenticatedUser => {
+        callback(authenticatedUser);
       })
       .catch(err => alert(err))
   },
   signout(callback: VoidFunction) {
     logout()
       .then(() => {
-        authProvider.isAuthenticated = false;
         callback();
       })
-      .catch(err => 
-        alert(err)
+      .catch(err => {}
       )
   }
 };
 
 interface AuthContextType {
-  user: any;
+  authenticatedUser: AuthenticatedUser;
   signin: (username: string, password: string, callback: VoidFunction) => void;
   signout: (callback: VoidFunction) => void;
 }
