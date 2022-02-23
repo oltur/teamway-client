@@ -1,5 +1,5 @@
 import React from 'react';
-import { login, logout} from '../auth/authAPI';
+import { login, logout} from './authAPI';
 import AuthenticatedUser from "./AuthenticatedUser";
 
 const authProvider = {

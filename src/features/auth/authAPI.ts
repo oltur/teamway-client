@@ -16,12 +16,11 @@ function login(userName: string, password: string): Promise<AuthenticatedUser> {
     if (response.ok) {
       return response.json();
     } else {
-      throw Error(response.statusText);
+      return Promise.reject(response.statusText);
     }
   })
   .then(data => {
     let token = data.token;
-//    setToken(token);
     const authenticatedUser = new AuthenticatedUser(
       data.userId,
       userName,
@@ -32,7 +31,6 @@ function login(userName: string, password: string): Promise<AuthenticatedUser> {
 }
 
 function logout(token: string): Promise<string> {
-  //const token = getToken()
   if(token == null || token === "") {
     return Promise.resolve("ok")
   }
@@ -48,9 +46,13 @@ function logout(token: string): Promise<string> {
       // deleteToken()
       return response.text();
     } else {
-      throw Error(response.statusText);
+      return Promise.reject(response.statusText);
     }
   })
+  .catch(error => {
+    console.log(error)
+    return Promise.reject(error)
+  });
 }
 
 export { login, logout };
