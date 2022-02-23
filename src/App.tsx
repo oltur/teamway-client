@@ -11,6 +11,7 @@ import ResponsiveAppBar from './features/responsiveAppBar/ResponsiveAppBar';
 import LoginPage from './features/loginPage/LoginPage';
 import LogoutPage from './features/logoutPage/LogoutPage';
 import TestPage from './features/test/TestPage';
+import ResultPage from './features/test/ResultPage';
 import WelcomePage from './features/welcome/WelcomePage';
 import AuthProvider from './features/auth/AuthProvider';
 import RequireAuth from './features/auth/RequireAuth';
@@ -37,6 +38,14 @@ function App() {
               element={
                 <RequireAuth>
                   <TestPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path='/result'
+              element={
+                <RequireAuth>
+                  <ResultPage />
                 </RequireAuth>
               }
             />

@@ -8,7 +8,7 @@ const WelcomePage = () => {
         <Typography variant="h6" gutterBottom>
           Welcome
         </Typography>
-        <p>Welcome to your personality test. Click <Link to={`/test`}>here</Link> to start a new one</p>
+        <p>Welcome to your personality test. Click <Link to={`/test`}>here</Link> to start a test</p>
       </React.Fragment>
     );
   }

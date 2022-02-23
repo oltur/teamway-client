@@ -1,6 +1,7 @@
 import { Test } from "./Test";
+import { GetNextQuestionResponse } from "./GetNextQuestionResponse";
 
-function getNextQuestion(token: string, testId: string): Promise<string> {
+function getNextQuestion(token: string, testId: string): Promise<GetNextQuestionResponse> {
   return fetch(`http://localhost:8081/api/v1/test-taken/next?test-id=${testId}`, {
     method: 'GET',
     headers: {
@@ -9,9 +10,7 @@ function getNextQuestion(token: string, testId: string): Promise<string> {
     },
   })
   .then((response) => {
-    if(response.status == 204) {
-      return Promise.resolve("");
-    } else if (response.ok) {
+    if (response.ok) {
       return response.json();
     } else {
       return Promise.reject(response.statusText);
@@ -81,7 +80,9 @@ function getTestResult(token: string, testId: string): Promise<string> {
     },
   })
   .then((response) => {
-    if (response.ok) {
+    if(response.status === 202) {
+      return "";
+    } else if (response.ok) {
       return response.json();
     } else {
       return Promise.reject(response.statusText);

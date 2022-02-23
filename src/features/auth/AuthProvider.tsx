@@ -21,8 +21,8 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     };
   
     let signout = (token: string, callback: VoidFunction | null = null) => {
+      dispatch(set(""));
       return authProvider.signout(token, () => {
-        dispatch(set(""));
         if(!!callback) {
           callback();
         }

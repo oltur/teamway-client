@@ -1,5 +1,3 @@
-import { QuestionAnswer } from "@mui/icons-material";
-
 interface Test {
     id: string;
     title: string;

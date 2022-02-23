@@ -43,7 +43,6 @@ function logout(token: string): Promise<string> {
   })
   .then((response) => {
     if (response.ok) {
-      // deleteToken()
       return response.text();
     } else {
       return Promise.reject(response.statusText);

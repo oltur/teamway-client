@@ -1,103 +1,100 @@
-import { AlignVerticalCenterTwoTone } from "@mui/icons-material";
 import { Typography, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, FormHelperText, Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../auth/auth";
-import { getNextQuestion, answerQuestion, getTestResult, getTestByTitle } from './testAPI';
-import { useNavigate, useLocation } from "react-router-dom";
-import * as H from "history";
-import { Test, Question, Answer } from "./Test";
-
-interface stateType {
-  from: { pathname: string }
-}
+import { getNextQuestion, answerQuestion, getTestByTitle } from './testAPI';
+import { useNavigate } from "react-router-dom";
+import { Question, Answer } from "./Test";
 
 function TestPage() {
   let navigate = useNavigate();
-  let location = useLocation();
   let auth = useAuth();
 
-  let l = location as H.Location;
-
-    const { register, handleSubmit, watch, formState: { errors } } = useForm();
-    const onSubmit = (data: any) => {
-      if(answer == "") {
-        alert("Please choose an answer");
-      }
-      console.log(testId, question.title, answer);
-      let z = answerQuestion(auth.authenticatedUser.token, testId, question.title, answer)
+  const { handleSubmit } = useForm();
+  const onSubmit = (data: any) => {
+    if (answer === "") {
+      alert("Please choose an answer");
+      return
     }
-    
-    //console.log(watch("example"));
-    //const { control } = useForm();
-  
-    const handleRadioChange = (event: { target: { value: any; }; }, value: any) => {
-      setAnswer(value);
-    };
-  
-    const [testId, setTestId] = useState("");
-    const [question, setQuestion] = useState({title:"", answers:[{title:""}]});
-    const [answer, setAnswer] = useState("");
+    console.log(testId, question.title, answer);
+    answerQuestion(auth.authenticatedUser.token, testId, question.title, answer)
+      .then(() => window.location.reload())
+      .catch((error) => {
+        if (error === "Unauthorized") {
+          navigate("/logout");
+        }
+      });
+  }
 
-    useEffect(() => {
-      (async () => {
-        try {
+  const handleRadioChange = (event: { target: { value: any; }; }, value: any) => {
+    setAnswer(value);
+  };
+
+  const [testId, setTestId] = useState("");
+  const [getNextQuestionResult, setGetNextQuestionResult] = useState({ testFinished: false, question: "", totalQuestions: 0, questionNumber: 0 });
+  const [question, setQuestion] = useState({ title: "", answers: [{ title: "" }] });
+  const [answer, setAnswer] = useState("");
+
+  useEffect(() => {
+    (async () => {
+      try {
         const test = await getTestByTitle(auth.authenticatedUser.token, "Are you an introvert or an extrovert?");
         setTestId(test.id)
-        const questionTitle = await getNextQuestion(auth.authenticatedUser.token, test.id);
-        if (questionTitle == "") {
-          const result = await getTestResult(auth.authenticatedUser.token, testId)
-          alert(result)
-          navigate("/")
+        const r = await getNextQuestion(auth.authenticatedUser.token, test.id);
+        if (r.testFinished) {
+          navigate("/result")
         }
-        const question = test.questions.find((q:Question) => q.title == questionTitle); 
+        setGetNextQuestionResult(r)
+        const question = test.questions.find((q: Question) => q.title === r.question);
         setQuestion(question!);
+      }
+      catch (error) {
+        if (error === "Unauthorized") {
+          navigate("/logout");
         }
-        catch (error) {
-          if (error === "Unauthorized") {
-            navigate(l, { replace: true });
-          }
-        }
-      })();
-    })
+      }
+    })();
+  }, [auth.authenticatedUser.token, navigate])
 
-    return (
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <React.Fragment>
-          <Typography variant="h6" gutterBottom>
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <React.Fragment>
+        <Typography variant="h6" gutterBottom>
           {question.title}
-          </Typography>
-          <FormControl
-            component="fieldset"
-            variant="filled"
-          // disabled
+        </Typography>
+        <FormControl
+          component="fieldset"
+          variant="filled"
+        >
+          <FormLabel
+            component="legend"
+            htmlFor="answers"
           >
-            <RadioGroup
-              aria-label="answers"
-              id="answers"
-              name="radio-buttons-group"
-              onChange={handleRadioChange}
-            >
-              {question.answers.map((a: Answer, i: number) => <FormControlLabel key={a.title} value={a.title} control={<Radio />} label={a.title} />)}
-            </RadioGroup>
-            <FormHelperText>Choose one</FormHelperText>
-          </FormControl>
-          {/* <input defaultValue="test" {...register("example")} />
-          <input {...register("exampleRequired", { required: true })} />
-          {errors.exampleRequired && <span>This field is required</span>} */}
-          <div className="Button">
+            {`Question ${getNextQuestionResult.questionNumber + 1} of ${getNextQuestionResult.totalQuestions}`}
+          </FormLabel>
+          <RadioGroup
+            aria-label="answers"
+            id="answers"
+            name="answers"
+            onChange={handleRadioChange}
+          >
+            {question.answers.map((a: Answer, i: number) => <FormControlLabel key={a.title} value={a.title} control={<Radio />} label={a.title} />)}
+          </RadioGroup>
+          <FormHelperText>Choose one</FormHelperText>
+        </FormControl>
+        <div className="Button">
           <Button
             type="submit"
             variant="contained"
             color="primary"
           >
-            Submit
+            Next
           </Button>
-          </div>
-        </React.Fragment>
-      </form>
-    );
+        </div>
+      </React.Fragment>
+    </form>
+  );
 }
-  
+
 export default TestPage;
 
