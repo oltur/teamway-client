@@ -38,7 +38,8 @@ function TestPage() {
   useEffect(() => {
     (async () => {
       try {
-        const test = await getTestByTitle(auth.authenticatedUser.token, "Are you an introvert or an extrovert?");
+        const testTitle: string = process.env.REACT_APP_TEST_TITLE!;
+        const test = await getTestByTitle(auth.authenticatedUser.token, testTitle);
         setTestId(test.id)
         const r = await getNextQuestion(auth.authenticatedUser.token, test.id);
         if (r.testFinished) {

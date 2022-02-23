@@ -5,7 +5,8 @@ function login(userName: string, password: string): Promise<AuthenticatedUser> {
     userName: userName,
     password: password
   }
-  return fetch('http://localhost:8081/api/v1/user/login', {
+  const apiUrl : string = process.env.REACT_APP_API_URL!;
+  return fetch(`${apiUrl}v1/user/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -34,7 +35,8 @@ function logout(token: string): Promise<string> {
   if(token == null || token === "") {
     return Promise.resolve("ok")
   }
-  return fetch('http://localhost:8081/api/v1/user/logout', {
+  const apiUrl : string = process.env.REACT_APP_API_URL!;
+  return fetch(`${apiUrl}v1/user/logout`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

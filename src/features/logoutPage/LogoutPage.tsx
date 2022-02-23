@@ -8,7 +8,7 @@ function LogoutPage() {
 
   useEffect(() => {
     auth.signout(auth.authenticatedUser.token, null)
-  }, [auth.authenticatedUser.token])
+  }, [auth])
 
 
     return (

@@ -1,3 +1,9 @@
+# Teamway test task: Client
+
+Please pay attention:
+* The site does not work in Safari browser because of fetch API used. Need to polyfill.
+* The configuration is provided in .env file
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
 
 ## Available Scripts

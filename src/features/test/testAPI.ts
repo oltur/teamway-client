@@ -2,7 +2,8 @@ import { Test } from "./Test";
 import { GetNextQuestionResponse } from "./GetNextQuestionResponse";
 
 function getNextQuestion(token: string, testId: string): Promise<GetNextQuestionResponse> {
-  return fetch(`http://localhost:8081/api/v1/test-taken/next?test-id=${testId}`, {
+  const apiUrl : string = process.env.REACT_APP_API_URL!;
+  return fetch(`${apiUrl}v1/test-taken/next?test-id=${testId}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -25,7 +26,8 @@ function getNextQuestion(token: string, testId: string): Promise<GetNextQuestion
 }
 
 function answerQuestion(token: string, testId: string, questionTitle: string, answerTitle: string): Promise<string> {
-  return fetch(`http://localhost:8081/api/v1/test-taken?test-id=${testId}&question-title=${questionTitle}&answer-title=${answerTitle}`, {
+  const apiUrl : string = process.env.REACT_APP_API_URL!;
+  return fetch(`${apiUrl}v1/test-taken?test-id=${testId}&question-title=${questionTitle}&answer-title=${answerTitle}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -49,7 +51,8 @@ function answerQuestion(token: string, testId: string, questionTitle: string, an
 
 
 function getTestByTitle(token: string, title: string): Promise<Test> {
-  return fetch(`http://localhost:8081/api/v1/test-by-title/${encodeURIComponent(title)}`, {
+  const apiUrl : string = process.env.REACT_APP_API_URL!;
+  return fetch(`${apiUrl}v1/test-by-title/${encodeURIComponent(title)}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -72,7 +75,8 @@ function getTestByTitle(token: string, title: string): Promise<Test> {
 }
 
 function getTestResult(token: string, testId: string): Promise<string> {
-  return fetch(`http://localhost:8081/api/v1/test-taken?test-id=${testId}`, {
+  const apiUrl : string = process.env.REACT_APP_API_URL!;
+  return fetch(`${apiUrl}v1/test-taken?test-id=${testId}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
