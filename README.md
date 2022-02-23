@@ -3,6 +3,7 @@
 Please pay attention:
 * The site does not work in Safari browser because of fetch API used. Need to polyfill.
 * The configuration is provided in .env file
+* You can use the following accounts for testing with server API at https://github.com/oltur/teamway-server: username: User1, password: 1; or username: User2, password: 2
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
 
